@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💡 Chiroqlar Ro‘yxati</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+    <div class="container mt-5">
+        <div class="card shadow-lg p-4">
+            <h2 class="text-center text-primary mb-4">💡 Chiroqlar Ro‘yxati</h2>
+
+            <!-- Qidirish shakli -->
+            <form method="GET" class="d-flex mb-4">
+                <input type="text" name="q" class="form-control me-2" placeholder="🔍 Chiroq nomini qidiring..." value="{{ request.GET.q }}">
+                <button type="submit" class="btn btn-primary">Qidirish</button>
+            </form>
+
+            <!-- Yangi chiroq qo'shish tugmasi -->
+            <div class="text-end mb-3">
+                <a href="{% url 'chiroq-create' %}" class="btn btn-success">➕ Yangi Chiroq Qo‘shish</a>
+            </div>
+
+            <!-- Chiroq ro‘yxati -->
+            {% if chiroqlar %}
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <thead class="table-primary">
+                            <tr>
+                                <th>#</th>
+                                <th>📸 Rasm</th>
+                                <th>💡 Brand</th>
+                                <th>💰 Narxi</th>
+                                <th>📦 Miqdori</th>
+                                <th>⚡ Vatt Kuchi</th>
+                                <th>🎨 Rangi</th>
+                                <th>⚙️ Amal</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for chiroq in chiroqlar %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>
+                                    {% if chiroq.image %}
+                                        <img src="{{ chiroq.image.url }}" alt="{{ chiroq.brand }}" class="img-thumbnail" style="width: 80px; height: 80px;">
+                                    {% else %}
+                                        <span class="text-muted">🚫 Rasm yo‘q</span>
+                                    {% endif %}
+                                </td>
+                                <td><a href="{% url 'chiroq-detail' chiroq.pk %}" class="text-decoration-none text-dark fw-bold">{{ chiroq.brand }}</a></td>
+                                <td>${{ chiroq.price }}</td>
+                                <td>{{ chiroq.quantity }} dona</td>
+                                <td>{{ chiroq.vatt_kuchi }} W</td>
+                                <td>{{ chiroq.color }}</td>
+                                <td>
+                                    <a href="{% url 'chiroq-update' chiroq.pk %}" class="btn btn-warning btn-sm">✏️ Tahrirlash</a>
+                                    <a href="{% url 'chiroq-delete' chiroq.pk %}" class="btn btn-danger btn-sm">🗑 O‘chirish</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p class="text-center text-muted">🚫 Hozircha hech qanday chiroq mavjud emas.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
